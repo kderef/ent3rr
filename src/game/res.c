@@ -19,6 +19,7 @@ static const Color
 
 #define INCLUDE_TEXTURE(FTYPE, IDX) do { \
         INCBIN(IDX, PATH_##IDX); \
+        (void)bin_##IDX##_end; \
         Image i = LoadImageFromMemory(FTYPE, bin_##IDX##_data, bin_##IDX##_size); \
         textures[IDX] = LoadTextureFromImage(i); \
         UnloadImage(i); \
@@ -31,16 +32,18 @@ enum
 };
 #define PATH_TX_BRICK "res/brick.png"
 
+#ifdef DEBUG
 static const char* TEXTURE_PATHS[TX_MAX] = {
     [TX_BRICK] = PATH_TX_BRICK
 };
+#endif
+
 
 static Texture textures[TX_MAX] = {0};
 
 FN void textures_load() {
-    uint i;
 #ifdef DEBUG
-    for (i = 0; i < TX_MAX; i++) textures[i] = LoadTexture(TEXTURE_PATHS[i]);
+    for (uint i = 0; i < TX_MAX; i++) textures[i] = LoadTexture(TEXTURE_PATHS[i]);
 #else
     INCLUDE_TEXTURE(".png", TX_BRICK);
 #endif
@@ -59,6 +62,7 @@ FN void textures_unload() {
 #else
 #define INCLUDE_FONT(NAME, FTYPE, PATH) do {\
         INCBIN(NAME, PATH); \
+        (void)bin_##NAME##_end; \
         NAME = LoadFontFromMemory(FTYPE, bin_##NAME##_data, bin_##NAME##_size, INCL_FONT_SIZE, NULL, 0); \
     } while (0)
 #endif
