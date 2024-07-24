@@ -18,6 +18,7 @@
 #pragma GCC diagnostic pop
 #pragma GCC diagnostic pop
 
+#define INCBIN_SILENCE_BITCODE_WARNING
 #define INCBIN_STYLE INCBIN_STYLE_SNAKE
 #define INCBIN_PREFIX bin_
 #include <incbin.h>

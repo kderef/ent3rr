@@ -1,0 +1,4 @@
+-Iext/raygui/src
+-Iext/raylib/src
+-Isrc/
+-Iext/incbin
