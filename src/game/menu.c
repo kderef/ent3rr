@@ -5,13 +5,12 @@
 #include "state.c"
 #include "res.c"
 #include "ui_style.c"
-#include <time.h>
+#include "cmd.c"
 
 FN void menu_draw_background() {
     const Color tint = {0, 255, 0, 255};
 
     const f32 scale = 10.0;
-    const rect screen = rectnew(0, 0, screen_w, screen_h);
     const Texture brick = textures[TX_BRICK];
 
     const f32 w_scaled = brick.width * scale;
@@ -84,8 +83,7 @@ FN bool menu_button(rect bounds, i32 font_size, const char* text) {
 
 FN void menu_draw_bottom_bar() {
     // Update time
-
-    const i32 prev_font_size = GuiGetStyle(0, TEXT_SIZE);
+    save_font_size();
     const i32 font_size = Clamp(screen_w * 0.02, 20.0, 30.0);
     const f32 bar_height = font_size + 10.0;
     GuiSetStyle(0, TEXT_SIZE, font_size);
@@ -107,12 +105,11 @@ FN void menu_draw_bottom_bar() {
 
     GuiDrawText(clock, rectnew(screen_w - font_size * 10, bar.y, font_size * 10, bar.height), TEXT_ALIGN_RIGHT, FG_1);
     
-
-    GuiSetStyle(0, TEXT_SIZE, prev_font_size);
+    restore_font_size();
 }   
 
 FN void menu_draw_ui() {
-    const i32 prev_font_size = GuiGetStyle(0, TEXT_SIZE);
+    save_font_size();
     const i32 font_size = Clamp(screen_w * 0.05, 20.0, 50.0);
     GuiSetStyle(0, TEXT_SIZE, font_size);
 
@@ -125,11 +122,15 @@ FN void menu_draw_ui() {
 
     if (menu_button(button_bounds, font_size, "INITIATE BOOT SEQUENCE")) {
         state = GAME_CMD;
+        ui_set_colortheme(COLORTHEME_CMD);
+        if (!cmd_loaded) {
+            cmd_init();
+        }
+        return;
     }
 
     ui_set_colortheme(COLORTHEME_REDTERM);
     button_bounds.y += button_bounds.height + 10.0;
-
 
     if (menu_button(button_bounds, font_size, "TERMINATE PROGRAM")) {
         _game_running = false;
@@ -137,7 +138,7 @@ FN void menu_draw_ui() {
     }
 
     ui_set_colortheme(COLORTHEME_GREENTERM);
-    GuiSetStyle(0, TEXT_SIZE, prev_font_size);
+    restore_font_size();
 }
 
 FN void menu_draw() {

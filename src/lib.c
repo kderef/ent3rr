@@ -7,8 +7,16 @@
 #include <raylib.h>
 #include <stdbool.h>
 
+// Disable warnings
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
+#pragma GCC diagnostic ignored "-Wunused-variable"
+
 #define RAYGUI_IMPLEMENTATION
 #include <raygui.h>
+
+#pragma GCC diagnostic pop
+#pragma GCC diagnostic pop
 
 #define INCBIN_STYLE INCBIN_STYLE_SNAKE
 #define INCBIN_PREFIX bin_
@@ -59,4 +67,24 @@ u32 xorshift32() {
 	x ^= x >> 17;
 	x ^= x << 5;
 	return xorshift_state = x;
+}
+
+static inline void toggle_fullscreen() {
+    static i32 previous_width, previous_height;
+
+    if (IsWindowFullscreen()) {
+        ToggleFullscreen();
+        SetWindowSize(previous_width, previous_height);
+        return;
+    }
+
+    previous_width = GetScreenWidth();
+    previous_height = GetScreenHeight();
+
+    const i32 monitor = GetCurrentMonitor();
+    const i32 monitor_w = GetMonitorWidth(monitor);
+    const i32 monitor_h = GetMonitorHeight(monitor);
+
+    SetWindowSize(monitor_w, monitor_h);
+    ToggleFullscreen();    
 }

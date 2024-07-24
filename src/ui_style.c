@@ -528,6 +528,7 @@ static const GuiStyleProp terminalStyleProps[TERMINAL_STYLE_PROPS_COUNT] = {
 typedef enum {
     COLORTHEME_GREENTERM = 0,
     COLORTHEME_REDTERM,
+    COLORTHEME_CMD,
 } UiColortheme;
 
 #define TERMINAL_STYLE_RED_PROPS_COUNT 14
@@ -551,9 +552,31 @@ static const GuiStyleProp redTerminalStyleProps[TERMINAL_STYLE_RED_PROPS_COUNT] 
     //{ 0, TEXT_SPACING, 0x00000000 },
 };
 
+#define TERMINAL_STYLE_CMD_PROPS_COUNT 14
+static const GuiStyleProp cmdTerminalStyleProps[TERMINAL_STYLE_CMD_PROPS_COUNT] = {
+    { 0, BORDER_COLOR_NORMAL, 0x000000ff },  // Black border
+    { 0, BASE_COLOR_NORMAL, 0x000000ff },    // Black background
+    { 0, TEXT_COLOR_NORMAL, 0xffffffff },    // White text
+    { 0, BORDER_COLOR_FOCUSED, 0x000000ff }, // Black border when focused
+    { 0, BASE_COLOR_FOCUSED, 0x000000ff },   // Black background when focused
+    { 0, TEXT_COLOR_FOCUSED, 0xffffffff },   // White text when focused
+    { 0, BORDER_COLOR_PRESSED, 0x000000ff }, // Black border when pressed
+    { 0, BASE_COLOR_PRESSED, 0x000000ff },   // Black background when pressed
+    { 0, TEXT_COLOR_PRESSED, 0xffffffff },   // White text when pressed
+    { 0, BORDER_COLOR_DISABLED, 0x000000ff },// Black border when disabled
+    { 0, BASE_COLOR_DISABLED, 0x000000ff },  // Black background when disabled
+    { 0, TEXT_COLOR_DISABLED, 0xffffffff },  // White text when disabled
+    { 0, LINE_COLOR, 0xffffffff },           // White line color
+    { 0, BACKGROUND_COLOR, 0xffffffff },     // Black background
+    //{ 0, TEXT_LINE_SPACING, 0x00000018 },
+    //{ 0, TEXT_SIZE, 0x00000010 },
+    //{ 0, TEXT_SPACING, 0x00000000 },
+};
+
+
 FN void ui_set_colortheme(UiColortheme theme) {
     uint props_count;
-    GuiStyleProp* props;
+    const GuiStyleProp* props;
 
     switch (theme) {
         case COLORTHEME_GREENTERM: {
@@ -563,6 +586,10 @@ FN void ui_set_colortheme(UiColortheme theme) {
         case COLORTHEME_REDTERM: {
             props_count = TERMINAL_STYLE_RED_PROPS_COUNT;
             props = redTerminalStyleProps;
+        } break;
+        case COLORTHEME_CMD: {
+            props_count = TERMINAL_STYLE_CMD_PROPS_COUNT;
+            props = cmdTerminalStyleProps;
         }
     }
 

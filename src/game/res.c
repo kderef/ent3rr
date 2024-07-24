@@ -75,4 +75,17 @@ FN void fonts_unload() {
     UnloadFont(font_ibm);
 }
 
+/************** Window icon **************/
+
+static Image window_icon;
+FN Image window_icon_load() {
+    INCBIN(window_icon, "res/icon.png");
+    (void)bin_window_icon_end;
+    return window_icon = LoadImageFromMemory(".png", bin_window_icon_data, bin_window_icon_size);
+}
+
+FN void window_icon_unload() {
+    UnloadImage(window_icon);
+}
+
 #pragma GCC pop_options

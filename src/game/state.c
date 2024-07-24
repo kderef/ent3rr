@@ -27,6 +27,7 @@ static f32 ten_second_timer = 0.0f;
 static time_t now;
 static struct tm* current_time;
 
+static i32 prev_font_size;
 static bool _game_running = true;
 static f32 dt;
 static i32 screen_w, screen_h;
@@ -53,4 +54,12 @@ FN void state_update() {
 FN void update_time() {
     now = time(NULL);
     current_time = localtime(&now);
+}
+
+FN void save_font_size() {
+    prev_font_size = GuiGetStyle(0, TEXT_SIZE);
+}
+
+FN void restore_font_size() {
+    GuiSetStyle(0, TEXT_SIZE, prev_font_size);
 }
