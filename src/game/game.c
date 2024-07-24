@@ -2,6 +2,8 @@
 #include "menu.c"
 #include "state.c"
 #include "res.c"
+#include "ui_style.c"
+#include "cmd.c"
 
 /// Set target FPS
 FN void game_set_fps(int fps) {
@@ -24,13 +26,17 @@ FN bool game_running() {
 FN void game_init(uint flags, int w, int h, const char* title) {
     SetConfigFlags(flags);
     InitWindow(w, h, title);
+    SetWindowMinSize(w, h);
     InitAudioDevice();
+
+    SetExitKey(0);
 }
 
 /// Load all the data
 FN void game_load() {
     textures_load();
     fonts_load();
+    ui_load_style_terminal(&font_01);
 }
 
 /// Unload all assets, before game_close()
@@ -45,8 +51,9 @@ FN void game_update() {
     state_update();
 
     switch (state) {
-        case GAME_MENU:
-            menu_update();
+        case GAME_MENU: break;
+        case GAME_CMD:
+            cmd_update();
             break;
     }
 }
@@ -59,6 +66,9 @@ FN void game_draw() {
     switch (state) {
         case GAME_MENU:
             menu_draw();
+            break;
+        case GAME_CMD:
+            cmd_draw();
             break;
     }
 

@@ -13,6 +13,7 @@ typedef enum GameState GameState;
 
 enum GameState {
     GAME_MENU = 0,
+    GAME_CMD,
 };
 
 FN void game_init(uint flags, int w, int h, const char* title);
@@ -25,4 +26,3 @@ FN void game_unload();
 FN bool game_running();
 
 FN void menu_draw();
-FN void menu_update();

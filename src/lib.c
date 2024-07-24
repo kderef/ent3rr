@@ -1,10 +1,14 @@
 #pragma once
 
+#define VERSION "0.1.0"
+
 #include <stdint.h>
 #include <raymath.h>
 #include <raylib.h>
-#include <raygui.h>
 #include <stdbool.h>
+
+#define RAYGUI_IMPLEMENTATION
+#include <raygui.h>
 
 #define INCBIN_STYLE INCBIN_STYLE_SNAKE
 #define INCBIN_PREFIX bin_
