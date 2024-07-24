@@ -11,6 +11,11 @@ BIN = bin/ENT3RR
 ifeq ($(OS), Windows_NT)
 	CFLAGS += -lgdi32 -lwinmm
 	RELEASE_FLAGS += -mwindows
+else
+	UNAME_S = $(shell uname -s)
+	ifeq ($(UNAME_S), Darwin)
+		CFLAGS += -framework CoreVideo -framework IOKit -framework Cocoa -framework GLUT -framework OpenGL
+	endif
 endif
 
 default: release

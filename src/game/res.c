@@ -1,6 +1,7 @@
 #pragma once
 
 #include "game.h"
+#include <stdio.h>
 #include "lib.c"
 
 /*************************** COLORS ***************************/
