@@ -58,6 +58,11 @@ FN void cmd_update() {
     }
 }
 
+FN void cmd_run(char* command) {
+    char* trimmed = strtrim(command);
+    TraceLog(LOG_ERROR, "%s", trimmed);
+}
+
 FN void cmd_draw() {
     //Background is already cleared to BLACK
     // prompt style: />
@@ -87,6 +92,9 @@ FN void cmd_draw() {
 
     static char command[512];
     if (GuiTextBox(bounds, command, cmd.font_size, true)) {
+        cmd_run(command);
+
+        // Reset command
         command[0] = '\0';
     }
 

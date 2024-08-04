@@ -2,19 +2,6 @@
 
 #include "game/game.h"
 
-//////////////////////////////////////////////////////////////////////////////////
-//                                                                              //
-// StyleAsCode exporter v2.0 - Style data exported as a values array            //
-//                                                                              //
-// USAGE: On init call: GuiLoadStyleTerminal();                                   //
-//                                                                              //
-// more info and bugs-report:  github.com/raysan5/raygui                        //
-// feedback and support:       ray[at]raylibtech.com                            //
-//                                                                              //
-// Copyright (c) 2020-2024 raylib technologies (@raylibtech)                    //
-//                                                                              //
-//////////////////////////////////////////////////////////////////////////////////
-
 #define TERMINAL_STYLE_PROPS_COUNT  17
 
 // WARNING: This style uses a custom font: "Mecha.ttf" (size: 16, spacing: 0)

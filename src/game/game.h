@@ -1,6 +1,5 @@
 #pragma once
 
-#include <raylib.h>
 #include "lib.c"
 
 #ifdef DEBUG
@@ -9,9 +8,7 @@
 #define FN static inline
 #endif
 
-typedef enum GameState GameState;
-
-enum GameState {
+enum gamestate {
     GAME_MENU = 0,
     GAME_CMD,
 };
@@ -23,6 +20,6 @@ FN void game_update();
 FN void game_draw();
 FN void game_close();
 FN void game_unload();
-FN bool game_running();
+FN bool game_should_close();
 
 FN void menu_draw();

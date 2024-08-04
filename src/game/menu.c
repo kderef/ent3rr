@@ -4,7 +4,7 @@
 #include "lib.c"
 #include "state.c"
 #include "res.c"
-#include "ui_style.c"
+#include "ui/style.c"
 #include "cmd.c"
 
 FN void menu_draw_background() {
@@ -33,7 +33,6 @@ FN void menu_draw_text_overlay() {
     const i32 cols = screen_w / char_size + 2; // Add extra columns for smooth scrolling
     const i32 rows = screen_h / char_size + 2; // Add extra rows for smooth scrolling
     const Color tint = {0, 255, 0, 40};  // Semi-transparent white
-    uint rand_index = GetRandomValue(0, sizeof(random_bits));
 
     // Update the scrolling offsets
     offset_x += scroll_speed * GetFrameTime();
@@ -43,13 +42,16 @@ FN void menu_draw_text_overlay() {
     if (offset_x >= char_size) offset_x -= char_size;
     if (offset_y >= char_size) offset_y -= char_size;
 
+    u32 rand;
+    u8 bit;
+
     i32 y, x;
     for (y = 0; y < rows; y++) {
         for (x = 0; x < cols; x++) {
+            rand = xorshift32(&rand_state);
+            bit = rand & 1;
             // Generate a random character ('0' or '1')
-            rand_index += 1;
-            if (rand_index == sizeof(random_bits)) rand_index = 0;
-            char number[2] = {random_bits[rand_index] + '0', '\0'};
+            char number[2] = {bit + '0', '\0'};
             // Draw the number at the position with the offset applied
             DrawTextEx(font_01, number, vec2new(x * char_size - offset_x, y * char_size - offset_y), char_size, 1.0, tint);
         }
@@ -69,7 +71,7 @@ FN void menu_draw_title() {
     const Color tint = { 0, 228, 48, 255 };
 
     DrawTextEx(font_01, title, vec2new(
-        (f32)(screen_w / 2) - title_dims.x / 2.0,
+        (f32)(screen_w) / 2 - title_dims.x / 2,
         title_size
     ), title_size, 1.0, tint);
 }
@@ -133,7 +135,7 @@ FN void menu_draw_ui() {
     button_bounds.y += button_bounds.height + 10.0;
 
     if (menu_button(button_bounds, font_size, "TERMINATE PROGRAM")) {
-        _game_running = false;
+        st_game_should_close = true;
         return;
     }
 

@@ -11,7 +11,6 @@ static const Color
     FG_3 = {189, 174, 147, 255},
     FG_4 = {168, 153, 152, 255};
 
-
 /*************************** TEXTURES ***************************/
 
 #pragma GCC push_options
@@ -25,11 +24,7 @@ static const Color
         UnloadImage(i); \
     } while (0)
 
-enum
-{
-    TX_BRICK,
-    TX_MAX
-};
+enum { TX_BRICK, TX_MAX };
 #define PATH_TX_BRICK "res/brick.png"
 
 #ifdef DEBUG
@@ -81,6 +76,11 @@ FN void fonts_unload() {
 
 /************** Window icon **************/
 
+#ifndef _WIN32
+#define SetWindowIcon(...)
+FN void window_icon_load() {}
+FN void window_icon_unload() {}
+#else
 static Image window_icon;
 FN Image window_icon_load() {
     INCBIN(window_icon, "res/icon.png");
@@ -91,5 +91,6 @@ FN Image window_icon_load() {
 FN void window_icon_unload() {
     UnloadImage(window_icon);
 }
+#endif
 
 #pragma GCC pop_options

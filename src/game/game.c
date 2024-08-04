@@ -1,8 +1,9 @@
 #include "game.h"
 #include "menu.c"
+#include "raylib.h"
 #include "state.c"
 #include "res.c"
-#include "ui_style.c"
+#include "ui/style.c"
 #include "cmd.c"
 
 /// Set target FPS
@@ -17,13 +18,16 @@ FN void game_close() {
 }
 
 /// Returns false if the game should quit
-FN bool game_running() {
-    return _game_running;
+FN bool game_should_close() {
+    return st_game_should_close;
 }
 
 
 /// Open the window and set the initial game state
 FN void game_init(uint flags, int w, int h, const char* title) {
+    // Seed random
+    rand_state = time(NULL);
+    
     SetConfigFlags(flags);
     InitWindow(w, h, title);
     SetWindowMinSize(w, h);
@@ -40,6 +44,7 @@ FN void game_load() {
     fonts_load();
     ui_load_style_terminal(&font_01);
 }
+#define game_reload game_load
 
 /// Unload all assets, before game_close()
 FN void game_unload() {
@@ -51,7 +56,7 @@ FN void game_unload() {
 
 /// Update state, before drawing
 FN void game_update() {
-    _game_running ^= WindowShouldClose();
+    st_game_should_close = st_game_should_close || WindowShouldClose();
     state_update();
 
     if (IsKeyPressed(KEY_F11)) {
@@ -86,6 +91,8 @@ FN void game_draw() {
     snprintf(fps_buf, sizeof(fps_buf) / sizeof(char), "FPS: %d", GetFPS());
     DrawText(fps_buf, 0, 0, 20, PURPLE);
 #endif
+
+    DrawText("HELLO", 10, 10, 200, WHITE);
 
     EndDrawing();
 }

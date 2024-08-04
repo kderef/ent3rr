@@ -3,22 +3,15 @@
 #include "game.h"
 #include <time.h>
 
-static const u8 random_bits[] = {
-    0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 1, 1, 1, 1, 1,
-    1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-    0, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 1, 0, 0, 1, 1,
-    0, 1, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 1, 1, 1, 0,
-    0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1, 0,
-    0, 1, 0, 0, 0, 1, 1, 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1,
-    1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1,
-    1, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 1,
-    1, 1, 1, 0, 1, 0, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 0,
-    1, 1, 1, 1, 1, 0, 1, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 1,
-    0, 1, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0, 0, 0, 1,
-    0, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 1,
-    1, 1, 0, 1, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1,
-};
+// Random
+static u32 rand_state;
+FN u32 xorshift32(u32* state) {
+    u32 x = *state;
+    	x ^= x << 13;
+    	x ^= x >> 17;
+    	x ^= x << 5;
+    return *state = x;
+}
 
 // Time management
 static f32 one_second_timer = 0.0f;
@@ -28,12 +21,12 @@ static time_t now;
 static struct tm* current_time;
 
 static i32 prev_font_size;
-static bool _game_running = true;
+static bool st_game_should_close = false;
 static f32 dt;
 static i32 screen_w, screen_h;
 static vec2 mouse_pos, mouse_delta;
 static f32 mouse_wheel;
-static GameState state;
+static enum gamestate state;
 
 FN void state_update() {
     dt = GetFrameTime();

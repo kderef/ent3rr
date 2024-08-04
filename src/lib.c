@@ -1,10 +1,11 @@
 #pragma once
 
+#include <string.h>
 #define VERSION "0.1.0"
 
 #include <stdint.h>
-#include <raymath.h>
 #include <raylib.h>
+#include <raymath.h>
 #include <stdbool.h>
 
 // Disable warnings
@@ -60,16 +61,6 @@ static inline vec2 rectcenter(rect r) {
     );
 }
 
-static u32 xorshift_state;
-
-u32 xorshift32() {
-	u32 x = xorshift_state;
-	x ^= x << 13;
-	x ^= x >> 17;
-	x ^= x << 5;
-	return xorshift_state = x;
-}
-
 static inline void toggle_fullscreen() {
     static i32 previous_width, previous_height;
 
@@ -88,4 +79,23 @@ static inline void toggle_fullscreen() {
 
     SetWindowSize(monitor_w, monitor_h);
     ToggleFullscreen();    
+}
+
+static inline char* strtrim(char* s) {
+    #define ISSPACE(C) ((C) == ' ' || (C) == '\n' || (C) == '\t')
+    // Trim left
+    while (ISSPACE(*s)) s++;
+
+    const size_t len = strlen(s);
+    for (size_t i = len - 1; i > 0; i--) {
+        if (!ISSPACE(s[i])) {
+            s[i] = '\0';
+            return s;
+        }
+        s--;
+    }
+
+    return s;
+
+    #undef ISSPACE
 }
