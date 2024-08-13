@@ -2,13 +2,14 @@
 
 #include "game.h"
 #include "lib.c"
+#include "state/rand.c"
 #include "state.c"
 #include "res.c"
 #include "ui/style.c"
 #include "cmd.c"
 
 FN void menu_draw_background() {
-    const Color tint = {0, 255, 0, 255};
+    const Color tint = {0, 200, 0, 255};
 
     const f32 scale = 10.0;
     const Texture brick = textures[TX_BRICK];
@@ -100,7 +101,7 @@ FN void menu_draw_bottom_bar() {
 
     // Draw the extra stuff on the right
     static char clock[] = "#139#00:00";
-    if (ten_second_timer == 0.0f) {
+    if (timer.ten_second == 0.0f) {
         update_time();
         snprintf(clock, 11, "#139#%02d:%02d", current_time->tm_hour, current_time->tm_min);
     }

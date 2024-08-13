@@ -2,7 +2,7 @@
 
 #include "lib.c"
 
-#ifdef DEBUG
+#if defined(DEBUG) && !defined(RELEASE_TEST)
 #define FN
 #else
 #define FN static inline

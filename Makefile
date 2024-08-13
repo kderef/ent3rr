@@ -1,5 +1,7 @@
-CC = gcc
+CC = g++
+RAYGUI_CC = gcc
 CFLAGS = -Wall -Wextra
+FRAMEWORKS =
 IFLAGS = -Iext/raygui/src -Iext/raylib/src -Isrc/ -Iext/incbin 
 LFLAGS = -Lext/raylib/src -lraylib
 DEBUG_FLAGS = -O0 -DDEBUG
@@ -24,28 +26,33 @@ ifeq ($(OS), Windows_NT)
 	RM = del
 else
 	UNAME_S = $(shell uname -s)
-	ifeq ($(UNAME_S), Darwin)
-		CFLAGS += -framework CoreVideo -framework IOKit -framework Cocoa -framework GLUT -framework OpenGL
+	ifeq ($(UNAME_S), Darwin))
+		FRAMEWORKS = -framework CoreVideo -framework IOKit -framework Cocoa -framework GLUT -framework OpenGL
 	endif
 endif
 
 default: release
 
-libgame:
-	$(CC) $(DEBUG_FLAGS) $(IFLAGS) $(LFLAGS) -shared -fPIC src/game/game.c -o lib/libgame.so $(CFLAGS)
+raygui:
+	$(RAYGUI_CC) $(IFLAGS) -O3 -s -c -DRAYGUI_IMPLEMENTATION ext/raygui/src/raygui.h -o lib/raygui.o
+	
 
-debug: libgame
+libgame:
+	$(CC) $(DEBUG_FLAGS) $(FRAMEWORKS) $(IFLAGS) $(LFLAGS) -fPIC -shared src/game/game.c -o lib/libgame.so $(CFLAGS) $(LFLAGS)
+
+debug: libgame raygui
 	$(CC) $(MAIN) $(EXTRA) -o $(BIN) $(IFLAGS) $(CFLAGS) $(DEBUG_FLAGS)
 
-release: $(MAIN)
+release: $(MAIN) raygui
 	-$(RESOURCE_COMMAND)
 	$(CC) $(MAIN) $(EXTRA) -o $(BIN) $(LFLAGS) $(IFLAGS) $(CFLAGS) $(RELEASE_FLAGS)
 
-release_test: $(MAIN)
+release_test: $(MAIN) raygui
 	-$(RESOURCE_COMMAND)
-	$(CC) $(MAIN) $(EXTRA) -o $(BIN) $(LFLAGS) $(IFLAGS) $(CFLAGS) $(RELEASE_FLAGS) -DDEBUG
+	$(CC) -DRELEASE_TEST $(MAIN) $(EXTRA) -o $(BIN) $(LFLAGS) $(IFLAGS) $(CFLAGS) $(RELEASE_FLAGS) -DDEBUG
 
 run:
 	$(BIN)
+	-$(RM) lib/*
 
-.PHONY: libgame debug release run
+.PHONY: libgame debug release run raygui

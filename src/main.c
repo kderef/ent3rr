@@ -3,7 +3,7 @@
 #define WINDOW_H 600
 #define FLAGS (FLAG_WINDOW_RESIZABLE)
 
-#ifdef DEBUG
+#if defined(DEBUG) && !defined(RELEASE_TEST)
 #include "shared.h"
 #include <raylib.h>
 #include "shared.c"
@@ -15,12 +15,9 @@
 #include "game/game.c"
 #endif
 
-// Library loading
-
 int main(void) {
     // Load library and game
     lib_load();
-    lib_changed();
     
     game_init(FLAGS, WINDOW_W, WINDOW_H, WINDOW_TITLE);
     game_load();

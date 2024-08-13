@@ -92,7 +92,7 @@ FN void game_draw() {
     DrawText(fps_buf, 0, 0, 20, PURPLE);
 #endif
 
-    DrawText("HELLO", 10, 10, 200, WHITE);
+    // DrawRectangle(0, 0, 200, 100, BLACK);
 
     EndDrawing();
 }
